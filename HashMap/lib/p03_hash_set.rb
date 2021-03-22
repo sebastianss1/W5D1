@@ -7,9 +7,16 @@ class HashSet
   end
 
   def insert(key)
+    i = self[key]
+    unless @store[i].include?(key.hash)
+      @store[i] << key.hash
+      @count += 1
+    end
   end
 
   def include?(key)
+    i = self[key]
+    @store[i].include?(key.hash)
   end
 
   def remove(key)
@@ -18,7 +25,7 @@ class HashSet
   private
 
   def [](num)
-    # optional but useful; return the bucket corresponding to `num`
+    num % num_buckets
   end
 
   def num_buckets

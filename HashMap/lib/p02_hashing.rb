@@ -34,23 +34,12 @@ class Hash
   # This returns 0 because rspec will break if it returns nil
   # Make sure to implement an actual Hash#hash method
   def hash
-    # break the keys and values into arrays
-    # call our newly created string#hash and array#hash methods on them
-    # debugger
     return nil.hash if self.empty?
-    # keys = self.keys.map { |key| key.to_s }
-    # values = self.values
-    # pairs = keys + values
-
     hashed_pairs = []
     self.each do |key, val|
-      hashed_pairs << key.hash ^ val.hash
+      hashed_pairs << key.hash 
     end
-
-    hashed_pairs.hash
-
-    # check if el is a string or integer
-      # perform appropriate hashing on the type
+    hashed_pairs.inject { |acc, el| acc ^ el }
   end
 end
 
