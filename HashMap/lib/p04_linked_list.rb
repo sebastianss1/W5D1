@@ -38,11 +38,11 @@ class LinkedList
   end
 
   def first
-    self[0]
+    @head.next
   end
 
   def last
-    self[-1]
+    @tail.prev
   end
 
   def empty?
@@ -51,28 +51,36 @@ class LinkedList
   end
 
   def get(key)
+    self.each { |link| return link.val if link.key == key }
   end
 
   def include?(key)
+    self.each { |link| return true if link.key == key }
+    false
   end
 
   def append(key, val)
-    debugger
     node = Node.new(key,val)
     
     end_node = @tail.prev
     
-    node.next = @tail
-    @tail.prev = node
+    node.next, @tail.prev = @tail, node # <= detaches tail with new node
 
-    end_node.next = node
-    node.prev = end_node
+    end_node.next, node.prev = node, end_node # <= attaches new node+tail back to chain
   end
 
   def update(key, val)
+    self.each { |link| link.val = val if link.key == key }
   end
 
   def remove(key)
+    self.each do |link|
+      if link.key == key
+        prev_node = link.prev
+        next_node = link.next
+        prev_node.next, next_node.prev = next_node, prev_node
+      end
+    end
   end
 
   def each(&blc)
