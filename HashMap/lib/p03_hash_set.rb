@@ -1,3 +1,5 @@
+require "byebug"
+
 class HashSet
   attr_reader :count
 
@@ -7,7 +9,8 @@ class HashSet
   end
 
   def insert(key)
-    i = self[key]
+    resize!(@store) if @count == num_buckets
+    i = self[key.hash]
     unless @store[i].include?(key.hash)
       @store[i] << key.hash
       @count += 1
@@ -15,11 +18,16 @@ class HashSet
   end
 
   def include?(key)
-    i = self[key]
+    i = self[key.hash]
     @store[i].include?(key.hash)
   end
 
   def remove(key)
+    i = self[key.hash]
+    if @store[i].include?(key.hash)
+      @store[i].delete(key.hash)
+      @count -= 1
+    end
   end
 
   private
@@ -32,6 +40,13 @@ class HashSet
     @store.length
   end
 
-  def resize!
+  def resize!(buckets)
+    @store = Array.new(num_buckets * 2) { Array.new }
+    buckets.each do |bucket| 
+      bucket.each do |value| 
+        i = self[value]
+        @store[i] << value
+      end 
+    end
   end
 end
