@@ -1,4 +1,5 @@
 # require "enumerable"
+require "byebug"
 
 class Node
 
@@ -56,6 +57,7 @@ class LinkedList
   end
 
   def append(key, val)
+    debugger
     node = Node.new(key,val)
     
     end_node = @tail.prev
