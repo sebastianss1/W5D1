@@ -40,12 +40,18 @@ class IntSet
   end
 
   def insert(num)
+    i = num % num_buckets
+    @store[i] << num unless include?(num)
   end
 
   def remove(num)
+    i = num % num_buckets
+    @store[i].delete(num)
   end
 
   def include?(num)
+    i = num % num_buckets
+    @store[i].include?(num)
   end
 
   private
@@ -68,12 +74,24 @@ class ResizingIntSet
   end
 
   def insert(num)
+    i = num % num_buckets
+    unless include?(num)
+      @store[i] << num
+      @count += 1
+    end
   end
 
   def remove(num)
+    i = num % num_buckets
+    if include?(num)
+      @store[i].delete(num)
+      @count -= 1
+    end
   end
 
   def include?(num)
+    i = num % num_buckets
+    @store[i].include?(num)
   end
 
   private
@@ -86,6 +104,14 @@ class ResizingIntSet
     @store.length
   end
 
-  def resize!
+  def resize!(*buckets)
+    if @count > num_buckets
+      @store = Array.new(num_buckets * 2) { Array.new }
+    end
+    # reinsert the values from the buckets passed in
+    # until i >= num_buckets
+      # use #insert to place all the values
   end
 end
+
+
