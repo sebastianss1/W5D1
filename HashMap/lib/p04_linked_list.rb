@@ -37,12 +37,16 @@ class LinkedList
   end
 
   def first
+    self[0]
   end
 
   def last
+    self[-1]
   end
 
   def empty?
+    return true if @head.next == @tail
+    false
   end
 
   def get(key)
@@ -52,6 +56,15 @@ class LinkedList
   end
 
   def append(key, val)
+    node = Node.new(key,val)
+    
+    end_node = @tail.prev
+    
+    node.next = @tail
+    @tail.prev = node
+
+    end_node.next = node
+    node.prev = end_node
   end
 
   def update(key, val)
@@ -60,7 +73,12 @@ class LinkedList
   def remove(key)
   end
 
-  def each
+  def each(&blc)
+    node = @head.next
+    until node == @tail
+      blc.call(node)
+      node = node.next
+    end
   end
 
   # uncomment when you have `each` working and `Enumerable` included
