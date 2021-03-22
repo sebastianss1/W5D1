@@ -12,6 +12,15 @@ end
 
 class String
   def hash
+    alphabet = ("a".."z").to_a + ("A".."Z").to_a
+    hash = {}
+
+    alphabet.each_with_index do |char, i|
+      hash[char] = -(i + 1).hash
+    end 
+
+    unique_hashed_chars = self.chars.map.with_index {|char, i| hash[char] ^ i.hash}
+    unique_hashed_chars[1..-1].inject(unique_hashed_chars[0].hash) { |acc, el| acc ^ el.hash}
   end
 end
 
